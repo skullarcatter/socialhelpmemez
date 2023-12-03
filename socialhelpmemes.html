@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Creator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f1f1f1; /* Default background color */
+        }
+
+        #settings-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+        }
+
+        #settings-menu {
+            display: none;
+            position: fixed;
+            top: 50px;
+            left: 10px;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            z-index: 1;
+        }
+
+        #meme-container {
+            position: relative;
+            max-width: 600px;
+            margin: auto;
+            margin-top: 100px; /* Adjusted margin to make room for settings menu */
+            background-color: white; /* Default background color for meme container */
+        }
+
+        #meme-img {
+            width: 100%;
+            height: auto;
+        }
+
+        .caption {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        #top-caption {
+            top: 10px;
+        }
+
+        #bottom-caption {
+            bottom: 10px;
+        }
+
+        input {
+            padding: 5px;
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="settings-container" onclick="toggleSettingsMenu()">
+        <button>Settings</button>
+        <div id="settings-menu">
+            <p>
+                Background Color:
+                <select id="background-color-selector">
+                    <option value="white">White</option>
+                    <option value="dark">Dark</option>
+                </select>
+            </p>
+            <button onclick="downloadMeme()">Download Meme</button>
+        </div>
+    </div>
+
+    <h1>Meme Creator</h1>
+
+    <div>
+        <label for="image-url">Image URL:</label>
+        <input type="text" id="image-url" placeholder="Enter image URL">
+    </div>
+
+    <div>
+        <label for="top-text">Top Caption:</label>
+        <input type="text" id="top-text" placeholder="Enter top caption">
+    </div>
+
+    <div>
+        <label for="bottom-text">Bottom Caption:</label>
+        <input type="text" id="bottom-text" placeholder="Enter bottom caption">
+    </div>
+
+    <button onclick="generateMeme()">Generate Meme</button>
+
+    <div id="meme-container">
+        <img id="meme-img" src="https://placekitten.com/600/400" alt="Meme Image">
+        <div class="caption" id="top-caption"></div>
+        <div class="caption" id="bottom-caption"></div>
+    </div>
+
+    <script>
+        function toggleSettingsMenu() {
+            const settingsMenu = document.getElementById('settings-menu');
+            settingsMenu.style.display = (settingsMenu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function generateMeme() {
+            const imageUrl = document.getElementById('image-url').value;
+            const topText = document.getElementById('top-text').value;
+            const bottomText = document.getElementById('bottom-text').value;
+
+            document.getElementById('meme-img').src = imageUrl;
+            document.getElementById('top-caption').innerText = topText;
+            document.getElementById('bottom-caption').innerText = bottomText;
+        }
+
+        function downloadMeme() {
+            const memeContainer = document.getElementById('meme-container');
+            html2canvas(memeContainer).then(function(canvas) {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'meme.png';
+                link.click();
+            });
+        }
+
+        // Function to change background color based on user selection
+        document.getElementById('background-color-selector').addEventListener('change', function() {
+            const selectedColor = this.value;
+            document.body.style.backgroundColor = selectedColor;
+            document.getElementById('meme-container').style.backgroundColor = selectedColor;
+        });
+    </script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</body>
+</html>
